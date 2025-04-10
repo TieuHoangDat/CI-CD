@@ -1,4 +1,4 @@
-name: Node.js CI
+name: CI/CD Node App
 
 on:
   push:
@@ -7,11 +7,11 @@ on:
     branches: [ main ]
 
 jobs:
-  build-and-test:
+  build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: 🔄 Checkout source code
+      - name: 🔄 Checkout source
         uses: actions/checkout@v3
 
       - name: 🟢 Setup Node.js
@@ -22,5 +22,15 @@ jobs:
       - name: 📦 Install dependencies
         run: npm install
 
-      - name: 🧪 Run tests
+      - name: 🧪 Run tests with coverage
         run: npm test
+
+      - name: 🧹 Run ESLint
+        run: npm run lint
+
+      - name: 🛡️ Audit for vulnerabilities
+        run: npm audit --audit-level=low
+
+      - name: 📤 Deploy (giả lập)
+        if: success()
+        run: echo "✅ Code passed. Deploying..."
